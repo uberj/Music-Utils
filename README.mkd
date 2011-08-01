@@ -2,7 +2,7 @@
 Usage
 =====
 
-./dl.sh -d <youtube url>
+./dl.sh -d _(youtube url)_
 
 ./flac2mp3 /srv/media/music /srv/media/music-mp3
-            <flac-files>        <dst for new mp3 files>
+            _flac-files_        _dst for new mp3 files_
