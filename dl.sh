@@ -2,13 +2,16 @@
 
 check_for_lib () {
     echo "Searching /usr/lib for libmp3lam3 library"
-    if [ $(find /usr/lib -iname libmp3lame.so) == ""  ]
+    if [ "$(find /usr/lib -iname libmp3lame.so*)" == ""  ]
     then
-        echo "Warning: libmp3lame.so was not found"
-    elif [ $(which youtube-dl) == "" ]
+        echo "Error: libmp3lame.so was not found"
+        echo "You should install <libavcodec-extra-52> as well."
+        exit
+    elif [ "$(which youtube-dl)" == "" ]
     then
         echo "youtube-dl not found"
         echo "Find it here http://rg3.github.com/youtube-dl/"
+        exit
     fi
 }
 
@@ -18,19 +21,23 @@ work_dir=$HOME/Music/
 case "$1" in
     -d)
         pwd
-        tmp_file=".$(echo $2 | sed 's/.*=//g')"
+        tmp_file="$(echo $2 | sed 's/.*=//g')"
         # Remove tmp if it exist, clear it if it does.
         # Eventually, you should just exit from this case. It
         # probably means there are concurent downloads of the
         # same file.
-        if [ -d "$tmp_file" ]
+        if [ -d ".$tmp_file" ]
         then
-            rm -rf $tmp_file
-            echo "testing"
+            echo "removing dir"
+            rm -rf ".$tmp_file"
+            echo "making new dir"
+            mkdir ".$tmp_file"
         else
-            mkdir $tmp_file
+            echo "making new dir"
+            mkdir ".$tmp_file"
         fi
-        cd $work_dir/$tmp_file
+        cd ".$tmp_file"
+        pwd
         youtube-dl -t $2
         for file in ./*
         do
