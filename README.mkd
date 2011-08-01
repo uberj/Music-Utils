@@ -3,3 +3,6 @@ Usage
 =====
 
 ./dl.sh -d <youtube url>
+
+./flac2mp3 /srv/media/music /srv/media/music-mp3
+            <flac-files>        <dst for new mp3 files>
