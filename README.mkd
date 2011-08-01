@@ -5,4 +5,3 @@ Usage
 ./dl.sh -d _(youtube url)_
 
 ./flac2mp3 /srv/media/music /srv/media/music-mp3
-            _flac-files_        _dst for new mp3 files_
