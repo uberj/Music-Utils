@@ -7,41 +7,46 @@ check_for_lib () {
         echo "Error: libmp3lame.so was not found"
         echo "You should install <libavcodec-extra-52> as well."
         exit
-    elif [ "$(which youtube-dl)" == "" ]
+    fi
+    echo "Searching /usr/lib for youtube-dl"
+    if [ "$(which youtube-dl)" == "" ]
     then
         echo "youtube-dl not found"
         echo "Find it here http://rg3.github.com/youtube-dl/"
         exit
     fi
 }
+usage () {
+    echo "Usage: dl.sh <flag> <youtube url>"
+    echo "flags:    -d  download single file"
+    exit
+}
 
+if [ $# -ne 2 ]
+then
+    usage
+fi
 check_for_lib
-echo $1 $2
+
+
 work_dir=$HOME/Music/
 case "$1" in
     -d)
-        pwd
         tmp_file="$(echo $2 | sed 's/.*=//g')"
         # Remove tmp if it exist, clear it if it does.
-        # Eventually, you should just exit from this case. It
-        # probably means there are concurent downloads of the
-        # same file.
         if [ -d ".$tmp_file" ]
         then
-            echo "removing dir"
             rm -rf ".$tmp_file"
-            echo "making new dir"
             mkdir ".$tmp_file"
         else
-            echo "making new dir"
             mkdir ".$tmp_file"
         fi
         cd ".$tmp_file"
+        echo -n "Moving into "
         pwd
         youtube-dl -t $2
         for file in ./*
         do
-            echo -n "File is: "
             echo "${file}"
             case "$file" in
                 *.flv)
@@ -65,7 +70,7 @@ case "$1" in
             mv "$new" $HOME/Music/Singles
             mv "$file" ../.orig
             cd ../
-            #rm -rf $tmp_file
+            rm -rf $tmp_file
         done
         ;;
     esac
