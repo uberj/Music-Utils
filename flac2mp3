@@ -3,9 +3,12 @@
 
 #Found on internet
 
+if [ ! -d $3 ]
+then
+    mkdir $3
+fi
+
 find *.flac -print0 | while read -d $'\0' a
-
-
 do
 OUTF=`echo "$a" | sed s/\.flac$/.mp3/g`
 

@@ -1,7 +1,16 @@
 #!/bin/bash
+# uberj
+
+function usage(){
+    echo "==== Flac be gone! (gone=moved into .flac_files directory) ===="
+    echo "Usage: ./allflac2mp3 <dir>"
+    echo "Where <dir> is the directory where you want to start searching and converting flac files."
+    echo "Note: There are probably a bunch of packages that you need to run this. I can't remember them"
+    echo "off the top of my head. I'm sure you can figure it out though."
+}
 
 function flac2mp3(){
-
+    # Found on the internet... somewhere.
     find *.flac -print0 | while read -d $'\0' a
     do
     OUTF=`echo "$a" | sed s/\.flac$/.mp3/g`
@@ -35,24 +44,24 @@ function do_dir(){
 
     for file in ./*
     do
-        if [ -f "$file" ]
-        then
-            echo "****Regulare file ".$file
-            continue
-        fi
-
         if [ -d "$file" ]
         then
-            cd $file
+            cd "$file"
             echo "****In dir $file"
             ls
             do_dir # Recurse
             cd ../
         else
-            echo "****File not dir: ".$file
+            # For soft link and other random file types.
+            echo "****File not dir: $file"
         fi
     done
 }
-
-do_dir
-
+if [ $# -ne 1 ] && [ -d $1 ]
+then
+    usage
+    exit 0
+fi
+cd $1
+do_dir # "main"
+exit 0
